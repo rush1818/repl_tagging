@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Untagged page</title>
+  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script>
+    window.loadTags = false;
+  </script>
+
+  <script src="script.js"></script>
+
+
+</head>
+
+<body>
+  <h2>
+    No tags on this page
+  </h2>
+  <div>
+    The referrer is
+    <script>document.write(document.referrer || 'none')</script>
+  </div>
+  <br />
+
+
+  <div>
+    <button class="mdc-button mdc-button--raised" onclick="nothing = 1"><span class="mdc-button__ripple"></span>click
+      w/o gtag()</button>
+
+    <button class="mdc-button mdc-button--raised" onclick="addToCart()">
+      <span class="mdc-button__ripple"></span>
+      Add to cart event</button>
+
+    <button class="mdc-button mdc-button--raised" onclick="purchase()"><span class="mdc-button__ripple"></span>Purchase
+      event</button>
+  </div>
+
+
+  <div>
+    <div class="links">
+      <a href="child1.html">Child 1 page</a>
+      <a href="child1.html" rel="noreferrer">Child 1 page with noreferrer</a>
+      <a href="child2.html">Child 2 page</a>
+
+      <a href="untagged.html">Untagged page</a>
+
+
+      <a href="https://google.com">Outbound link to Google.com in SAME tab</a>
+      <a href="https://google.com" target="_blank">Outbound link to Google.com in NEW tab</a>
+      <a href="https://google.com" target="_blank" rel="noreferrer">Outbound link to Google.com in NEW tab with
+        noreferrer</a>
+    </div>
+    <br />
+
+    <div>
+      <button class="mdc-button mdc-button--raised" onclick="back()"><span
+          class="mdc-button__ripple"></span>Back</button>
+
+      <button class="mdc-button mdc-button--raised" onclick="back()"><span
+          class="mdc-button__ripple"></span>Next</button>
+    </div>
+
+  </div>
+
+  <br />
+  <br />
+
+  <div>
+    <h4>Data layer:</h4>
+    <pre id="dataLayer"></pre>
+  </div>
+
+  <br />
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+
+
+.links {
+  display: flex;
+  flex-direction: column;
+}
+
+.links * {
+  margin: 8px 0;
+}
