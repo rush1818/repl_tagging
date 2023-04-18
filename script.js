@@ -1,7 +1,22 @@
 containerId = localStorage.getItem('containerId') || 'GTM-M8Z49QT'
 
 isGtm = localStorage.getItem('isGtm') !== 'false';
-ctfeUrl = localStorage.getItem('ctfeUrl') || 'https://www.googletagmanager.com'
+ctfeUrl = localStorage.getItem('ctfeUrl') || 'https://www.googletagmanager.com';
+
+(function initialize() {
+  const params = new URL(document.location).searchParams;
+
+  const tagId = params.get('tagId');
+  if (tagId) {
+    containerId = tagId;
+  }
+
+  const isGtmParam = params.get('isGtm');
+  if (isGtmParam) {
+    isGtm = isGtmParam !== 'false';
+  }
+  debugger;
+})();
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -9,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setOnLoadContainerInput();
   setGtmVal();
   loadTag();
+  setPageLink();
 });
 
 function loadTag() {
@@ -58,7 +74,7 @@ function reset(gtmOrGte) {
   storeContainerInStore(isThisGtm ? '' : 'G-FJV8CPP1GC');
   setCtfeInStore('');
   setGtmInStore(isThisGtm);
-  location.reload();
+  window.location = window.location.pathname;
 }
 
 function apply() {
@@ -72,7 +88,7 @@ function apply() {
   const isGtm = document.getElementById('gtm');
   setGtmInStore(isGtm ? isGtm.value === 'gtm' : true);
 
-  location.reload();
+  window.location = window.location.pathname;
 }
 
 function storeContainerInStore(val) {
@@ -85,6 +101,19 @@ function setCtfeInStore(val) {
 
 function setGtmInStore(val) {
   localStorage.setItem('isGtm', val);
+}
+
+function setPageLink() {
+  const el = document.getElementById('pageLink');
+  debugger;
+  if (!el) {
+    return;
+  }
+
+  const url = new URL(document.location);
+  url.searchParams.set('tagId', containerId);
+  url.searchParams.set('isGtm', isGtm ? 'true' : 'false');
+  el.innerText = url.href;
 }
 
 function next() {
