@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Long page name foobarbaz foobarbaz</title>
+  <title>EC page</title>
   <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
   <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
   <link href="style.css" rel="stylesheet" type="text/css" />
@@ -16,7 +16,7 @@
     function gtag() {dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', containerId);
+    gtag('config', containerId, {'allow_enhanced_conversions': true});
   </script>
 
   <script>
@@ -26,6 +26,18 @@
     }
   </script>
 
+  <script>
+
+    function setUserData() {
+      gtag('set', 'user_data', {
+        "email": document.getElementById("email").value,
+        "phone_number": document.getElementById("phone").value,
+        "first_name": document.getElementById("firstName").value,
+        "last_name": document.getElementById("lastName").value,
+        "address": document.getElementById("address").value,
+      });
+    }
+  </script>
 
 </head>
 
@@ -66,19 +78,55 @@
   <br />
 
   <div>
-    <h4>Supported URL params:</h4>
-    <ul>
-      <li>
-        <pre>tagId</pre> e.g. G-1234
-      </li>
-      <li>
-        <pre>isGtm</pre> "true" or "false"
-      </li>
-    </ul>
+    <h4>EC Form</h4>
+    <pre>
+      You need to load ads tag or GTE tag with Ads destination to get "em" param
+      <code>
+        gtag('config','AW-593490366')
+      </code>
 
-    <p>Link to current page:
-    <pre id="pageLink"></pre>
-    </p>
+    </pre>
+    <form>
+      <div class="page-item page-form">
+        <div class="form-item">
+          <h3>User data</h3>
+        </div>
+        <div>
+          <label>
+            First name:
+          </label>
+          <input id="firstName" type="text" name="First name" value="foo" />
+        </div>
+        <div>
+          <label>
+            Last name:
+          </label>
+          <input id="lastName" type="text" name="Last name" value="bar" />
+        </div>
+        <div>
+          <label>
+            Email:
+          </label>
+          <input id="email" type="email" name="email" value="test@123.com" />
+        </div>
+        <div>
+          <label>
+            Phone:
+          </label>
+          <input id="phone" type="phone" name="phone" value="+12345678900" />
+        </div>
+        <div>
+          <label>
+            Address:
+          </label>
+          <input id="address" type="text" name="address" value="93 Awesome, State, 001100, CA, USA" />
+        </div>
+        <div class="form-footer">
+          <button onclick="setUserData()" type="button">Set user data</button>
+        </div>
+        <div><button type="submit">Submit form</button></div>
+      </div>
+    </form>
   </div>
 
   <br />

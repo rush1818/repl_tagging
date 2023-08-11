@@ -1,4 +1,4 @@
-containerId = localStorage.getItem('containerId') || 'GTM-M8Z49QT'
+containerId = localStorage.getItem('containerId') || 'GTM-M8Z49QT';
 
 isGtm = localStorage.getItem('isGtm') !== 'false';
 ctfeUrl = localStorage.getItem('ctfeUrl') || 'https://www.googletagmanager.com';
@@ -15,7 +15,6 @@ ctfeUrl = localStorage.getItem('ctfeUrl') || 'https://www.googletagmanager.com';
   if (isGtmParam) {
     isGtm = isGtmParam !== 'false';
   }
-  debugger;
 })();
 
 
@@ -25,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setGtmVal();
   loadTag();
   setPageLink();
+  setOutboundHrefs();
 });
 
 function loadTag() {
@@ -105,7 +105,6 @@ function setGtmInStore(val) {
 
 function setPageLink() {
   const el = document.getElementById('pageLink');
-  debugger;
   if (!el) {
     return;
   }
@@ -152,6 +151,13 @@ function addToCart() {
 
 function purchase() {
   if (!gtag) return;
+  const emailInput = document.querySelectorAll('input[name="email"]');
+  if (emailInput && emailInput.length && false) {
+    const emailValue = emailInput[0].value;
+    gtag('set', 'user_data', {
+      "email": emailValue,
+    });
+  }
 
   gtag("event", "purchase", {
     currency: "USD",
@@ -168,4 +174,26 @@ function purchase() {
       }
     ]
   });
+}
+
+function setOutboundHrefs() {
+  const btn1 = document.getElementById('outbound');
+  const btn2 = document.getElementById('outboundRedirect');
+
+  const params = new URLSearchParams();
+  // params.set('tagId', containerId);
+  // params.set('isGtag', !isGtm);
+  // params.set('ctfeUrl', ctfeUrl);
+  params.set('redirect', window.location.href)
+
+  if (btn1) {
+    const url = `https://tagging.rushabhs.com/?${params}`;
+    btn1.href = url;
+  }
+
+  if (btn2) {
+    params.set('autoRedirect', true);
+    const url = `https://tagging.rushabhs.com/?${params}`;
+    btn2.href = url;
+  }
 }
