@@ -26,6 +26,8 @@
         "first_name": document.getElementById("firstName").value,
         "last_name": document.getElementById("lastName").value,
         "address": document.getElementById("address").value,
+        "zip": document.getElementById("zip").value,
+        "country": document.getElementById("country").value,
       });
     }
 
@@ -101,7 +103,19 @@
           <label>
             Address:
           </label>
-          <input id="address" type="text" class="address" value="93 Awesome, Mont, CA 95458, USA" />
+          <input id="address" type="text" class="address" value="93 Awesome, Mont, CA" />
+        </div>
+        <div>
+          <label>
+            Country:
+          </label>
+          <input id="country" type="text" class="country" value="USA" />
+        </div>
+        <div>
+          <label>
+            Zip:
+          </label>
+          <input id="zip" type="text" class="zip" value="95455" />
         </div>
         <div class="form-footer">
           <button onclick="setUserData()" type="button">Manual gtag(set) user data</button>
