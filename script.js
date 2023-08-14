@@ -151,13 +151,6 @@ function addToCart() {
 
 function purchase() {
   if (!gtag) return;
-  const emailInput = document.querySelectorAll('input[name="email"]');
-  if (emailInput && emailInput.length && false) {
-    const emailValue = emailInput[0].value;
-    gtag('set', 'user_data', {
-      "email": emailValue,
-    });
-  }
 
   gtag("event", "purchase", {
     currency: "USD",

@@ -27,6 +27,7 @@
   </script>
 
   <script>
+    gtag('config', 'AW-593490366', {'allow_enhanced_conversions': true});
 
     function setUserData() {
       gtag('set', 'user_data', {
@@ -36,6 +37,21 @@
         "last_name": document.getElementById("lastName").value,
         "address": document.getElementById("address").value,
       });
+    }
+
+
+    function sendConversion(url) {
+      var callback = function () {
+        if (typeof (url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+        'send_to': 'AW-593490366/1oSdCITqtbMDEL7j_5oC',
+        'transaction_id': '',
+        'event_callback': callback
+      });
+      return false;
     }
   </script>
 
@@ -124,7 +140,7 @@
         <div class="form-footer">
           <button onclick="setUserData()" type="button">Set user data</button>
         </div>
-        <div><button type="submit">Submit form</button></div>
+        <div><button type="button" onclick="sendConversion()">Send conversion</button></div>
       </div>
     </form>
   </div>
