@@ -1,0 +1,53 @@
+<html>
+
+<head>
+  <!-- Load ctfe helper. -->
+  <script src="../ctfe.js"></script>
+
+  <!-- Google tag (gtag.js) -->
+  <script>
+    document.write(
+      '<scri' + 'pt async src="' + ctfeUrl + '/gtag/js?id=G-288MKXRLLC"></scr' + 'ipt>');
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-288MKXRLLC');
+  </script>
+
+  <script>
+    function gtagEvent() {
+      gtag('event', 'scroll', {send_to: 'G-288MKXRLLC'});
+    }
+  </script>
+</head>
+
+<body>
+
+  <p>Test page where Tag-A connects to Dest-B, and a button to load Dest-A which is connected to Tag-B</p>
+
+  <h4>This page loads tag G-288MKXRLLC via tag id.</h4>
+
+  <p>Tag: G-288MKXRLLC, GT-P35FZPP</p>
+  <p>Destination: G-27FH84XKN4</p>
+  <br />
+  <br />
+
+  <h4>The other tag details:</h4>
+  <p>Tag: G-27FH84XKN4, GT-WKR8LV6</p>
+  <p>Destination: G-288MKXRLLC</p>
+
+
+  <button onclick="gtagEvent()">click here for gtagEvent to destination G-288MKXRLLC!</button>
+
+  <br>
+  <br>
+  <br>
+  <br>
+
+  <a href="../ctfe.html" target="_blank">Change CTFE url here and then reload this page.</a>
+
+</body>
+
+</html>
