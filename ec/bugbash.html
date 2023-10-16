@@ -7,15 +7,14 @@
   <title>EC page</title>
   <link href="../style.css" rel="stylesheet" type="text/css" />
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-593490366"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GT-5TWNTPR"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'AW-593490366', {'allow_enhanced_conversions': true});
+    gtag('config', 'GT-5TWNTPR', {'allow_enhanced_conversions': true});
     gtag('config', 'AW-10878821194', {'allow_enhanced_conversions': true});
-    gtag('config', 'GT-5TWNTPR');
   </script>
 
   <script>
@@ -28,30 +27,6 @@
         "address": document.getElementById("address").value,
         "zip": document.getElementById("zip").value,
         "country": document.getElementById("country").value,
-      });
-    }
-
-    function setMultipleUserData() {
-      gtag('set', 'user_data', {
-        "email": [document.getElementById("email").value, "foo@gmail.com"],
-        "phone_number": [document.getElementById("phone").value, "+12002221111"],
-        "address": [
-          {
-            "first_name": document.getElementById("firstName").value,
-            "last_name": document.getElementById("lastName").value,
-            "address": document.getElementById("address").value,
-            "postal_code": document.getElementById("zip").value,
-            "region": document.getElementById("country").value,
-          },
-          {
-            "first_name": "Foo",
-            "last_name": "Bar",
-            "address": "123 Bar street",
-            "postal_code": "98765",
-            "region": "UK",
-          }
-        ]
-
       });
     }
 
@@ -74,29 +49,17 @@
 </head>
 
 <body>
-  <h2>EC page1</h2>
+  <h2>EC page</h2>
 
   <br />
   <br />
-
-  <a href="gtm_ec.html">GTM ec page</a>
 
   <div>
     <h4>EC Form</h4>
-    <pre>
-      You need to load ads tag or GTE tag with Ads destination to get "em" param
-
-      <ul>
-        <li>DaD: AW-593490366</li>
-
-        <li>New acc with working conversions: AW-10878821194</li>
-      </ul>
-
-    </pre>
 
     <div>
-      <h2>Conversion "send_to":</h2>
-      <input value="AW-593490366/1oSdCITqtbMDEL7j_5oC" id="sendTo" style="width: 500px;">
+      <h2>Manual conversion "send_to":</h2>
+      <input value="AW-11370503888/lalsCMHjiusYENC98K0q" id="sendTo" style="width: 500px;">
     </div>
 
     <form>
@@ -148,10 +111,6 @@
         </div>
         <div class="form-footer">
           <button onclick="setUserData()" type="button">Manual gtag(set) user data</button>
-        </div>
-
-        <div class="form-footer">
-          <button onclick="setMultipleUserData()" type="button">Multiple gtag(set) user data</button>
         </div>
         <div>
           <button type="button" onclick="sendConversion()">Send conversion event</button>
