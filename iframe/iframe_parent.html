@@ -1,0 +1,36 @@
+<html>
+
+<head>
+  <style>
+    iframe {
+      display: block;
+      margin: 10px;
+      width: 500px;
+      height: 200px;
+    }
+  </style>
+</head>
+
+<body>
+  Iframe sandbox below
+
+  <!-- Sandbox with everything allowed -->
+  <!-- <iframe src="iframe_content.html"
+    sandbox="allow-forms allow-scripts allow-same-origin allow-modals allow-popups-to-escape-sandbox allow-popups allow-top-navigation"></iframe> -->
+
+  <div>
+    <h3>Frame 1: allow-forms allow-scripts allow-same-origin</h3>
+    <iframe src="iframe_content.html" sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
+  </div>
+
+  <div>
+    <h3>Frame 2: allow-forms allow-scripts (shopify)</h3>
+    <!-- shopify setup! -->
+    <iframe src="./iframe_content2.html" sandbox="allow-forms allow-scripts"></iframe>
+  </div>
+f
+  <!-- No sandbox -->
+  <!-- <iframe src="iframe_content.html"></iframe> -->
+</body>
+
+</html>
