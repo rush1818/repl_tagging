@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Iframe content</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-M8Z49QT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date())
+    console.log('log from iframe2')
+
+    function sendEvent() {
+      dataLayer.push({ event: 'someEvent' });
+    }
+  </script>
+
+
+</head>
+
+<body>
+  <h2>
+    Iframe content! Iframe loads GTM-M8Z49QT from prod.
+
+    <button onclick="sendEvent()">Send event</button>
+  </h2>
+</body>
+
+</html>
