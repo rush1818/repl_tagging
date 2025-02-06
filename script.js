@@ -16,6 +16,15 @@ removeTrailing();
   if (isGtmParam) {
     isGtm = isGtmParam !== "false";
   }
+
+  const ctfeParam = params.get("ctfe");
+  if (ctfeParam && ctfeUrl.length) {
+    try {
+      new URL(ctfeParam);
+      ctfeUrl = ctfeParam;
+      removeTrailing();
+    } catch (e) {}
+  }
 })();
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -117,6 +126,7 @@ function setPageLink() {
   const url = new URL(document.location);
   url.searchParams.set("tagId", containerId);
   url.searchParams.set("isGtm", isGtm ? "true" : "false");
+  url.searchParams.set("ctfe", ctfeUrl);
   el.innerText = url.href;
 }
 
