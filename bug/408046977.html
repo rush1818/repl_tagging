@@ -9,9 +9,16 @@
             'gtm.start':
                 new Date().getTime(), event: 'gtm.js'
         });
+        if (!gtag) {
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+        }
+        gtag('config', 'G-FOOBAR');
     </script>
 
     <script src="https://www.googletagmanager.com/gtm.js?id=GTM-NZQKGZ89"></script>
+    <script src="https://www.googletagmanager.com/gtag/js?id=G-FOOBAR"></script>
     <script src="https://www.googletagmanager.com/gtm.js?id=GTM-WBNNQRJ8"></script>
 
 </head>
