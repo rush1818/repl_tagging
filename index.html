@@ -14,9 +14,11 @@
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+    if (!isGtm) {
+      gtag('js', new Date());
 
-    gtag('config', containerId);
+      gtag('config', containerId);
+    }
   </script>
 
   <script>
