@@ -6,15 +6,18 @@
   <meta name="viewport" content="width=device-width">
   <title>EC page</title>
   <link href="../style.css" rel="stylesheet" type="text/css" />
+  <meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://gtm-ctfe-preprod.corp.google.com" />
+  <meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://googletagmanager.com" />
+  <meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://www.googletagmanager.com" />
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-593490366"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag() {dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
-    gtag('config', 'AW-593490366', {'allow_enhanced_conversions': true});
-    gtag('config', 'AW-10878821194', {'allow_enhanced_conversions': true});
+    gtag('config', 'AW-593490366', { 'allow_enhanced_conversions': true });
+    gtag('config', 'AW-10878821194', { 'allow_enhanced_conversions': true });
     gtag('config', 'GT-5TWNTPR');
   </script>
 
