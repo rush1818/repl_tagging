@@ -73,7 +73,7 @@ function loadGoogleTag(idToLoad, addConfigCall) {
     const el = document.createElement("script");
     el.async = true;
     el.src = ctfeUrl + "/gtag/js?id=" + idToLoad;
-    document.body.appendChild(el);
+    document.head.appendChild(el);
   })();
 
   if (addConfigCall) {
