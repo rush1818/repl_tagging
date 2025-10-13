@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Long page name foobarbaz foobarbaz</title>
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <!--   Load script first so that containerId is available. -->
+    <script src="script.js"></script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        if (!isGtm) {
+            gtag('js', new Date());
+
+            gtag('config', containerId);
+        }
+    </script>
+
+    <script>
+        loadGoogleTag('GT-PLWZKZD', true);
+    </script>
+
+</head>
+
+<body>
+    <h2>
+        This page loads container: <span>
+            <script>document.write(containerId)</script>
+        </span>
+    </h2>
+    <div>
+        The referrer is
+        <script>document.write(document.referrer || 'none')</script>
+    </div>
+
+    <br />
+
+    <h3>Change containerId: (note this will reload the page)</h3>
+    <label>ContainerId: </label><input id="newContainer">
+
+    <div>
+        <label>CTFE url: </label>
+        <input id="ctfeUrl" style="width: 350px;">
+    </div>
+
+    <div>
+        <label>GTM or GTE: </label>
+        <select id="gtm">
+            <option value="gtm">GTM</option>
+            <option value="gte">GTE</option>
+        </select>
+    </div>
+
+    <button onclick="reset('gtm')">Reset to GTM</button>
+    <button onclick="reset('gte')">Reset to GTE</button>
+    <button onclick="apply()">Apply</button>
+
+    <br />
+    <br />
+
+
+
+    <br />
+    <br />
+
+    <div>
+        <button class="mdc-button mdc-button--raised" onclick="nothing = 1"><span
+                class="mdc-button__ripple"></span>click
+            w/o gtag()</button>
+
+        <button class="mdc-button mdc-button--raised" onclick="addToCart()">
+            <span class="mdc-button__ripple"></span>
+            Add to cart event</button>
+
+        <button class="mdc-button mdc-button--raised" onclick="purchase()"><span
+                class="mdc-button__ripple"></span>Purchase
+            event</button>
+    </div>
+
+
+    <div>
+        <div class="links">
+            <ul>
+                <li><a href="simple.html">Simple M3</a></li>
+                <li><a href="complex.html" rel="noreferrer">Multiple tags</a></li>
+                <li><a href="../consent.html">Consent</a></li>
+
+
+                <li><a href="https://google.com">Outbound link to Google.com in SAME tab</a></li>
+                <li><a href="https://google.com" target="_blank">Outbound link to Google.com in NEW tab</a></li>
+                <li><a href="https://google.com" target="_blank" rel="noreferrer">Outbound link to Google.com in NEW tab
+                        with
+                        noreferrer</a></li>
+
+
+                <li><a id="outbound">Outbound link to another domain</a></li>
+                <li><a id="outboundRedirect">Outbound link to another domain with redirect back</a></li>
+            </ul>
+        </div>
+        <br />
+
+        <div>
+            <button class="mdc-button mdc-button--raised" onclick="back()"><span
+                    class="mdc-button__ripple"></span>Back</button>
+
+            <button class="mdc-button mdc-button--raised" onclick="back()"><span
+                    class="mdc-button__ripple"></span>Next</button>
+        </div>
+
+    </div>
+
+    <br />
+    <br />
+    <div>
+        <h4>Data layer:</h4>
+        <pre id="dataLayer"></pre>
+    </div>
+    <br />
+</body>
+
+</html>

@@ -41,10 +41,15 @@ function loadTag() {
   if (window.loadTags === false) return;
   if (isGtm) {
     loadGtmTag();
+  } else {
+    loadGoogleTag();
   }
 }
 
-function loadGtmTag() {
+function loadGtmTag(idToLoad) {
+  if (!idToLoad) {
+    idToLoad = containerId;
+  }
   (function (w, d, s, l, i) {
     w[l] = w[l] || [];
     w[l].push({
@@ -57,7 +62,23 @@ function loadGtmTag() {
     j.async = true;
     j.src = ctfeUrl + "/gtm.js?id=" + i + dl;
     f.parentNode.insertBefore(j, f);
-  })(window, document, "script", "dataLayer", containerId);
+  })(window, document, "script", "dataLayer", idToLoad);
+}
+
+function loadGoogleTag(idToLoad, addConfigCall) {
+  if (!idToLoad) {
+    idToLoad = containerId;
+  }
+  (function () {
+    const el = document.createElement("script");
+    el.async = true;
+    el.src = ctfeUrl + "/gtag/js?id=" + idToLoad;
+    document.body.appendChild(el);
+  })();
+
+  if (addConfigCall) {
+    gtag("config", idToLoad);
+  }
 }
 
 function setOnLoadCtfePath() {
