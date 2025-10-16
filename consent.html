@@ -13,7 +13,7 @@
   <script>
     consentGranted = false;
     window.dataLayer = window.dataLayer || [];
-    function gtag() {dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
 
     gtag('consent', 'default', {
       'ad_storage': 'denied',
@@ -36,11 +36,14 @@
   <script>
     window.dataLayer = window.dataLayer || [];
     if (!gtag) {
-      function gtag() {dataLayer.push(arguments);}
+      function gtag() { dataLayer.push(arguments); }
     }
-    gtag('js', new Date());
+    if (!gtm) {
 
-    gtag('config', containerId);
+      gtag('js', new Date());
+
+      gtag('config', containerId);
+    }
   </script>
 
   <script>
