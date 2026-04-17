@@ -50,7 +50,7 @@ function removeTrailing() {
 }
 
 function loadTags() {
-  if (window.loadTags === false) return;
+  if (window.shouldLoadTags === false) return;
   tags.forEach(tag => {
     if (tag.type === 'gtm') {
       loadGtmTag(tag.id);
