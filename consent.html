@@ -30,37 +30,17 @@
 
   </script>
 
-  <!--   Load script first so that containerId is available. -->
+  <!-- Load core tagging library -->
+  <script src="ctfe.js"></script>
+  <!-- Load page script -->
   <script src="script.js"></script>
-
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    if (!gtag) {
-      function gtag() { dataLayer.push(arguments); }
-    }
-    if (!gtm) {
-
-      gtag('js', new Date());
-
-      gtag('config', containerId);
-    }
-  </script>
-
-  <script>
-    if (!isGtm) {
-      document.write(
-        '<scri' + 'pt async src="' + ctfeUrl + '/gtag/js?id=' + containerId + '"></scr' + 'ipt>');
-    }
-  </script>
 
 
 </head>
 
 <body>
   <h2>
-    This page loads container: <span>
-      <script>document.write(containerId)</script>
-    </span>
+    This page loads tags: <span id="loadedTags"></span>
   </h2>
   <div>
     The referrer is
@@ -72,25 +52,34 @@
 
   <br />
 
-  <h3>Change containerId: (note this will reload the page)</h3>
-  <label>ContainerId: </label><input id="newContainer">
+  <h3>Manage Tags</h3>
 
   <div>
     <label>CTFE url: </label>
     <input id="ctfeUrl" style="width: 350px;">
   </div>
 
-  <div>
-    <label>GTM or GTE: </label>
-    <select id="gtm">
-      <option value="gtm">GTM</option>
-      <option value="gte">GTE</option>
-    </select>
+  <div id="tagsContainer" style="margin: 10px 0;">
+    <!-- Tags will be dynamically added here -->
   </div>
 
-  <button onclick="reset('gtm')">Reset to GTM</button>
-  <button onclick="reset('gte')">Reset to GTE</button>
-  <button onclick="apply()">Apply</button>
+  <button class="mdc-button mdc-button--raised" onclick="addTagRow()">
+    <span class="mdc-button__ripple"></span>Add Tag
+  </button>
+
+  <br /><br />
+
+  <button class="mdc-button mdc-button--raised" onclick="applyChanges()">
+    <span class="mdc-button__ripple"></span>Apply Changes
+  </button>
+
+  <button class="mdc-button mdc-button--outlined" onclick="resetToGtm()">
+    <span class="mdc-button__ripple"></span>Reset to GTM
+  </button>
+
+  <button class="mdc-button mdc-button--outlined" onclick="resetToGte()">
+    <span class="mdc-button__ripple"></span>Reset to GTAG
+  </button>
 
   <br />
   <br />

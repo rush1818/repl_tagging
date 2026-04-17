@@ -1,174 +1,129 @@
-containerId = localStorage.getItem("containerId") || "GTM-M8Z49QT";
-
-isGtm = localStorage.getItem("isGtm") !== "false";
-ctfeUrl = localStorage.getItem("ctfeUrl") || "https://www.googletagmanager.com";
-removeTrailing();
-
-(function initialize() {
-  const params = new URL(document.location).searchParams;
-
-  const tagId = params.get("tagId");
-  if (tagId) {
-    containerId = tagId;
-  }
-
-  const isGtmParam = params.get("isGtm");
-  if (isGtmParam) {
-    isGtm = isGtmParam !== "false";
-  }
-
-  const ctfeParam = params.get("ctfe");
-  if (ctfeParam && ctfeUrl.length) {
-    try {
-      new URL(ctfeParam);
-      ctfeUrl = ctfeParam;
-      removeTrailing();
-    } catch (e) {}
-  }
-})();
+// script.js - UI and Event Handling for index.html and tracking events
 
 document.addEventListener("DOMContentLoaded", () => {
-  removeTrailing();
-  setOnLoadCtfePath();
-  setOnLoadContainerInput();
-  setGtmVal();
-  loadTag();
+  // Populate CTFE URL input
+  const ctfeInput = document.getElementById("ctfeUrl");
+  if (ctfeInput) {
+    ctfeInput.value = getCtfeUrl();
+  }
+
+  // Populate Tags UI
+  renderTagsUI();
+
+  // Populate Header with loaded tags
+  renderLoadedTagsHeader();
+
   setPageLink();
   setOutboundHrefs();
 });
 
-function loadTag() {
-  if (window.loadTags === false) return;
-  if (isGtm) {
-    loadGtmTag();
-  } else {
-    loadGoogleTag();
+function renderTagsUI() {
+  const container = document.getElementById("tagsContainer");
+  if (!container) return;
+
+  container.innerHTML = '';
+  const tags = getTags();
+
+  tags.forEach((tag, index) => {
+    addTagRow(tag.id, tag.type);
+  });
+}
+
+function renderLoadedTagsHeader() {
+  const el = document.getElementById("loadedTags");
+  if (!el) return;
+
+  const tags = getTags();
+  if (tags.length === 0) {
+    el.innerText = 'None';
+    return;
+  }
+
+  el.innerText = tags.map(t => `${t.id} (${t.type})`).join(', ');
+}
+
+function addTagRow(id = '', type = 'gtm') {
+  const container = document.getElementById("tagsContainer");
+  if (!container) return;
+
+  const row = document.createElement('div');
+  row.className = 'tag-row';
+  row.style.marginBottom = '10px';
+  row.style.display = 'flex';
+  row.style.alignItems = 'center';
+  row.innerHTML = `
+    <label style="margin-right: 5px;">Tag ID: </label>
+    <input type="text" class="tag-id" value="${id}" style="width: 150px; margin-right: 15px;">
+    <label style="margin-right: 5px;">Type: </label>
+    <select class="tag-type" style="margin-right: 15px;">
+      <option value="gtm" ${type === 'gtm' ? 'selected' : ''}>GTM</option>
+      <option value="gtag" ${type === 'gtag' ? 'selected' : ''}>GTAG</option>
+    </select>
+    <button class="mdc-button mdc-button--outlined" onclick="removeTagRow(this)">
+      <span class="mdc-button__ripple"></span>Remove
+    </button>
+  `;
+  container.appendChild(row);
+}
+
+function removeTagRow(button) {
+  const row = button.closest('.tag-row');
+  if (row) {
+    row.remove();
   }
 }
 
-function loadGtmTag(idToLoad) {
-  if (!idToLoad) {
-    idToLoad = containerId;
-  }
-  (function (w, d, s, l, i) {
-    w[l] = w[l] || [];
-    w[l].push({
-      "gtm.start": new Date().getTime(),
-      event: "gtm.js",
-    });
-    var f = d.getElementsByTagName(s)[0],
-      j = d.createElement(s),
-      dl = l != "dataLayer" ? "&l=" + l : "";
-    j.async = true;
-    j.src = ctfeUrl + "/gtm.js?id=" + i + dl;
-    f.parentNode.insertBefore(j, f);
-  })(window, document, "script", "dataLayer", idToLoad);
-}
-
-function loadGoogleTag(idToLoad, addConfigCall) {
-  if (!idToLoad) {
-    idToLoad = containerId;
-  }
-  (function () {
-    const el = document.createElement("script");
-    el.async = true;
-    el.src = ctfeUrl + "/gtag/js?id=" + idToLoad;
-    document.head.appendChild(el);
-  })();
-
-  if (addConfigCall) {
-    gtag("config", idToLoad);
-  }
-}
-
-function setOnLoadCtfePath() {
-  const input = document.getElementById("ctfeUrl");
-  if (!input) return;
-
-  input.value = ctfeUrl;
-}
-
-function setGtmVal() {
-  const select = document.getElementById("gtm");
-  if (!select) return;
-
-  select.value = isGtm ? "gtm" : "gte";
-}
-
-function setOnLoadContainerInput() {
-  const input = document.getElementById("newContainer");
-  if (!input) return;
-
-  input.value = containerId;
-}
-
-function reset(gtmOrGte) {
-  const isThisGtm = gtmOrGte === "gtm";
-  storeContainerInStore(isThisGtm ? "" : "G-FJV8CPP1GC");
-  setCtfeInStore("");
-  setGtmInStore(isThisGtm);
-  window.location = window.location.pathname;
-}
-
-function apply() {
-  const input = document.getElementById("newContainer");
-  if (!input) setDefaultContainer();
-  storeContainerInStore(input.value);
-
+function applyChanges() {
   const ctfeInput = document.getElementById("ctfeUrl");
-  setCtfeInStore(ctfeInput ? ctfeInput.value : "");
+  if (ctfeInput) {
+    setCtfeUrl(ctfeInput.value);
+  }
 
-  const isGtm = document.getElementById("gtm");
-  setGtmInStore(isGtm ? isGtm.value === "gtm" : true);
+  const tagRows = document.querySelectorAll('.tag-row');
+  const newTags = [];
+  tagRows.forEach(row => {
+    const idInput = row.querySelector('.tag-id');
+    const typeSelect = row.querySelector('.tag-type');
+    if (idInput && idInput.value.trim() !== '') {
+      newTags.push({
+        id: idInput.value.trim(),
+        type: typeSelect.value
+      });
+    }
+  });
 
-  window.location = window.location.pathname;
+  setTags(newTags);
+
+  // Reload page to apply changes
+  window.location.reload();
 }
 
-function storeContainerInStore(val) {
-  localStorage.setItem("containerId", val);
+function resetToGtm() {
+  setTags([{ id: 'GTM-M8Z49QT', type: 'gtm' }]);
+  setCtfeUrl('');
+  window.location.reload();
 }
 
-function setCtfeInStore(val) {
-  ctfeUrl = val || "";
-  removeTrailing();
-  localStorage.setItem("ctfeUrl", val || "");
-}
-
-function setGtmInStore(val) {
-  localStorage.setItem("isGtm", val);
+function resetToGte() {
+  setTags([{ id: 'G-FJV8CPP1GC', type: 'gtag' }]);
+  setCtfeUrl('');
+  window.location.reload();
 }
 
 function setPageLink() {
   const el = document.getElementById("pageLink");
-  if (!el) {
-    return;
-  }
+  if (!el) return;
 
   const url = new URL(document.location);
-  url.searchParams.set("tagId", containerId);
-  url.searchParams.set("isGtm", isGtm ? "true" : "false");
-  url.searchParams.set("ctfe", ctfeUrl);
+  url.searchParams.set("ctfe", getCtfeUrl());
+  url.searchParams.set("tags", JSON.stringify(getTags()));
   el.innerText = url.href;
 }
 
-function next() {
-  history.go(1);
-}
-
-function back() {
-  history.go(-1);
-}
-
-setInterval(() => {
-  const dl = document.getElementById("dataLayer");
-  if (!dl) return;
-  dl.innerText = JSON.stringify(window.dataLayer, 0, 2);
-}, 1000);
-
+// Tracking events
 function addToCart() {
-  if (!gtag) return;
-
-  gtag("event", "add_to_cart", {
+  if (!window.gtag) return;
+  window.gtag("event", "add_to_cart", {
     currency: "USD",
     value: 7.77,
     items: [
@@ -185,9 +140,8 @@ function addToCart() {
 }
 
 function purchase() {
-  if (!gtag) return;
-
-  gtag("event", "purchase", {
+  if (!window.gtag) return;
+  window.gtag("event", "purchase", {
     currency: "USD",
     transaction_id: Math.floor(Math.random() * 1000),
     value: 7.77,
@@ -204,14 +158,20 @@ function purchase() {
   });
 }
 
+function next() { history.go(1); }
+function back() { history.go(-1); }
+
+setInterval(() => {
+  const dl = document.getElementById("dataLayer");
+  if (!dl) return;
+  dl.innerText = JSON.stringify(window.dataLayer, 0, 2);
+}, 1000);
+
 function setOutboundHrefs() {
   const btn1 = document.getElementById("outbound");
   const btn2 = document.getElementById("outboundRedirect");
 
   const params = new URLSearchParams();
-  // params.set('tagId', containerId);
-  // params.set('isGtag', !isGtm);
-  // params.set('ctfeUrl', ctfeUrl);
   params.set("redirect", window.location.href);
 
   if (btn1) {
@@ -223,11 +183,5 @@ function setOutboundHrefs() {
     params.set("autoRedirect", true);
     const url = `https://tagging.rushabhs.com/?${params}`;
     btn2.href = url;
-  }
-}
-
-function removeTrailing() {
-  if (ctfeUrl.endsWith("/")) {
-    ctfeUrl = ctfeUrl.slice(0, ctfeUrl.length - 1);
   }
 }
