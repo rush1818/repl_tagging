@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width">
   <title>EC page</title>
   <link href="../style.css" rel="stylesheet" type="text/css" />
+  <script src="../darkmode.js"></script>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=GT-5TWNTPR"></script>
   <script>
@@ -49,6 +50,17 @@
 </head>
 
 <body>
+  <header class="app-header">
+    <div class="header-title">Test Page</div>
+    <div class="theme-switcher">
+      <button id="theme-toggle-btn" class="theme-btn">Theme</button>
+      <div id="theme-dropdown" class="theme-dropdown-content">
+        <button data-theme="light">Light</button>
+        <button data-theme="dark">Dark</button>
+        <button data-theme="system">System</button>
+      </div>
+    </div>
+  </header>
   <h2>EC page</h2>
 
   <br />
