@@ -21,6 +21,9 @@
       'analytics_storage': 'denied'
     });
 
+    gtag('js', new Date());
+
+
     function grantConsent() {
       consentGranted = true;
       gtag('consent', 'update', {
