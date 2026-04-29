@@ -1,21 +1,21 @@
 // ctfe.js - Core Tagging Library
 
-const prodCtfe = 'https://www.googletagmanager.com';
-let ctfeUrl = localStorage.getItem('ctfeUrl') || prodCtfe;
+const prodCtfe = "https://www.googletagmanager.com";
+let ctfeUrl = localStorage.getItem("ctfeUrl") || prodCtfe;
 let tags = [];
 
 try {
-  tags = JSON.parse(localStorage.getItem('tags')) || [];
+  tags = JSON.parse(localStorage.getItem("tags")) || [];
 } catch (e) {
   console.error("Failed to parse tags from localStorage", e);
   tags = [];
 }
 
-const tagsRemoved = localStorage.getItem('tagsRemoved') === 'true';
+const tagsRemoved = localStorage.getItem("tagsRemoved") === "true";
 
 // Fallback to default if tags are empty and not explicitly removed
 if (tags.length === 0 && !tagsRemoved) {
-  tags.push({ id: 'GTM-M8Z49QT', type: 'gtm' });
+  tags.push({ id: "GTM-M8Z49QT", type: "gtm" });
 }
 
 removeTrailing();
@@ -27,7 +27,7 @@ removeTrailing();
   if (tagsParam) {
     try {
       tags = JSON.parse(tagsParam);
-      localStorage.setItem('tagsRemoved', tags.length === 0 ? 'true' : 'false');
+      localStorage.setItem("tagsRemoved", tags.length === 0 ? "true" : "false");
     } catch (e) {
       console.error("Failed to parse tags from URL", e);
     }
@@ -51,10 +51,10 @@ function removeTrailing() {
 
 function loadTags() {
   if (window.shouldLoadTags === false) return;
-  tags.forEach(tag => {
-    if (tag.type === 'gtm') {
+  tags.forEach((tag) => {
+    if (tag.type === "gtm") {
       loadGtmTag(tag.id);
-    } else if (tag.type === 'gtag') {
+    } else if (tag.type === "gtag") {
       loadGoogleTag(tag.id);
     }
   });
@@ -88,7 +88,9 @@ function loadGoogleTag(idToLoad) {
     window.dataLayer = [];
   }
   if (!window.gtag) {
-    window.gtag = function() { window.dataLayer.push(arguments); };
+    window.gtag = function () {
+      window.dataLayer.push(arguments);
+    };
     window.gtag("js", new Date());
   }
   window.gtag("config", idToLoad);
@@ -100,8 +102,8 @@ function getTags() {
 
 function setTags(newTags) {
   tags = newTags;
-  localStorage.setItem('tags', JSON.stringify(tags));
-  localStorage.setItem('tagsRemoved', tags.length === 0 ? 'true' : 'false');
+  localStorage.setItem("tags", JSON.stringify(tags));
+  localStorage.setItem("tagsRemoved", tags.length === 0 ? "true" : "false");
 }
 
 function getCtfeUrl() {
@@ -111,7 +113,7 @@ function getCtfeUrl() {
 function setCtfeUrl(url) {
   ctfeUrl = url || prodCtfe;
   removeTrailing();
-  localStorage.setItem('ctfeUrl', ctfeUrl);
+  localStorage.setItem("ctfeUrl", ctfeUrl);
 }
 
 // Auto load tags on DOMContentLoaded
