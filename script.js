@@ -24,8 +24,8 @@ function renderTagsUI() {
   container.innerHTML = '';
   const tags = getTags();
 
-  tags.forEach((tag, index) => {
-    addTagRow(tag.id, tag.type);
+  tags.forEach((tag) => {
+    addTagRow(tag.id, tag.type, tag.isActive !== false);
   });
 }
 
@@ -33,16 +33,16 @@ function renderLoadedTagsHeader() {
   const el = document.getElementById("loadedTags");
   if (!el) return;
 
-  const tags = getTags();
-  if (tags.length === 0) {
+  const activeTags = getTags().filter(t => t.isActive !== false);
+  if (activeTags.length === 0) {
     el.innerText = 'None';
     return;
   }
 
-  el.innerText = tags.map(t => `${t.id} (${t.type})`).join(', ');
+  el.innerText = activeTags.map(t => `${t.id} (${t.type})`).join(', ');
 }
 
-function addTagRow(id = '', type = 'gtm') {
+function addTagRow(id = '', type = 'gtm', isActive = true) {
   const container = document.getElementById("tagsContainer");
   if (!container) return;
 
@@ -51,7 +51,14 @@ function addTagRow(id = '', type = 'gtm') {
   row.style.marginBottom = '10px';
   row.style.display = 'flex';
   row.style.alignItems = 'center';
+  row.style.flexWrap = 'wrap';
+  row.style.gap = '10px';
+  row.style.padding = '0';
   row.innerHTML = `
+    <label style="display: flex; align-items: center; cursor: pointer; user-select: none;">
+      <input type="checkbox" class="tag-active" ${isActive ? 'checked' : ''} style="margin-right: 5px; cursor: pointer;">
+      Active
+    </label>
     <label style="margin-right: 5px;">Tag ID: </label>
     <input type="text" class="tag-id" value="${id}" style="width: 150px; margin-right: 15px;">
     <label style="margin-right: 5px;">Type: </label>
@@ -59,7 +66,7 @@ function addTagRow(id = '', type = 'gtm') {
       <option value="gtm" ${type === 'gtm' ? 'selected' : ''}>GTM</option>
       <option value="gtag" ${type === 'gtag' ? 'selected' : ''}>GTAG</option>
     </select>
-    <button class="mdc-button mdc-button--outlined" onclick="removeTagRow(this)">
+    <button class="mdc-button mdc-button--outlined" style="margin-left: 0;" onclick="removeTagRow(this)">
       <span class="mdc-button__ripple"></span>Remove
     </button>
   `;
@@ -84,10 +91,12 @@ function applyChanges() {
   tagRows.forEach(row => {
     const idInput = row.querySelector('.tag-id');
     const typeSelect = row.querySelector('.tag-type');
+    const activeCheckbox = row.querySelector('.tag-active');
     if (idInput && idInput.value.trim() !== '') {
       newTags.push({
         id: idInput.value.trim(),
-        type: typeSelect.value
+        type: typeSelect ? typeSelect.value : 'gtm',
+        isActive: activeCheckbox ? activeCheckbox.checked : true
       });
     }
   });
@@ -99,13 +108,13 @@ function applyChanges() {
 }
 
 function resetToGtm() {
-  setTags([{ id: 'GTM-M8Z49QT', type: 'gtm' }]);
+  setTags([{ id: 'GTM-M8Z49QT', type: 'gtm', isActive: true }]);
   setCtfeUrl('');
   window.location.reload();
 }
 
 function resetToGte() {
-  setTags([{ id: 'G-FJV8CPP1GC', type: 'gtag' }]);
+  setTags([{ id: 'G-FJV8CPP1GC', type: 'gtag', isActive: true }]);
   setCtfeUrl('');
   window.location.reload();
 }

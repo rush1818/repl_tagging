@@ -15,7 +15,7 @@ const tagsRemoved = localStorage.getItem("tagsRemoved") === "true";
 
 // Fallback to default if tags are empty and not explicitly removed
 if (tags.length === 0 && !tagsRemoved) {
-  tags.push({ id: "GTM-M8Z49QT", type: "gtm" });
+  tags.push({ id: "GTM-M8Z49QT", type: "gtm", isActive: true });
 }
 
 removeTrailing();
@@ -31,6 +31,13 @@ removeTrailing();
     } catch (e) {
       console.error("Failed to parse tags from URL", e);
     }
+  }
+
+  const tagIdParam = params.get("tagId");
+  if (!tagsParam && tagIdParam) {
+    const isGtmParam = params.get("isGtm");
+    const isGtm = isGtmParam !== null ? isGtmParam !== "false" : tagIdParam.startsWith("GTM-");
+    tags = [{ id: tagIdParam, type: isGtm ? "gtm" : "gtag", isActive: true }];
   }
 
   const ctfeParam = params.get("ctfe");
@@ -52,6 +59,7 @@ function removeTrailing() {
 function loadTags() {
   if (window.shouldLoadTags === false) return;
   tags.forEach((tag) => {
+    if (tag.isActive === false) return;
     if (tag.type === "gtm") {
       loadGtmTag(tag.id);
     } else if (tag.type === "gtag") {
