@@ -4,8 +4,17 @@ const prodCtfe = "https://www.googletagmanager.com";
 let ctfeUrl = localStorage.getItem("ctfeUrl") || prodCtfe;
 let tags = [];
 
+function normalizeTags(rawTags) {
+  if (!Array.isArray(rawTags)) return [];
+  return rawTags.map((tag) => ({
+    id: tag.id || "",
+    type: tag.type || "gtm",
+    isActive: tag.isActive !== false,
+  }));
+}
+
 try {
-  tags = JSON.parse(localStorage.getItem("tags")) || [];
+  tags = normalizeTags(JSON.parse(localStorage.getItem("tags")));
 } catch (e) {
   console.error("Failed to parse tags from localStorage", e);
   tags = [];
@@ -26,7 +35,7 @@ removeTrailing();
   const tagsParam = params.get("tags");
   if (tagsParam) {
     try {
-      tags = JSON.parse(tagsParam);
+      tags = normalizeTags(JSON.parse(tagsParam));
       localStorage.setItem("tagsRemoved", tags.length === 0 ? "true" : "false");
     } catch (e) {
       console.error("Failed to parse tags from URL", e);
@@ -109,7 +118,7 @@ function getTags() {
 }
 
 function setTags(newTags) {
-  tags = newTags;
+  tags = normalizeTags(newTags);
   localStorage.setItem("tags", JSON.stringify(tags));
   localStorage.setItem("tagsRemoved", tags.length === 0 ? "true" : "false");
 }

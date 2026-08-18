@@ -15,6 +15,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setPageLink();
   setOutboundHrefs();
+
+  // Keep pageLink updated live when user changes inputs/checkboxes
+  document.addEventListener("input", (e) => {
+    if (e.target.closest("#tagsContainer") || e.target.id === "ctfeUrl") {
+      setPageLink();
+    }
+  });
+  document.addEventListener("change", (e) => {
+    if (e.target.closest("#tagsContainer") || e.target.id === "ctfeUrl") {
+      setPageLink();
+    }
+  });
 });
 
 function renderTagsUI() {
@@ -71,12 +83,14 @@ function addTagRow(id = '', type = 'gtm', isActive = true) {
     </button>
   `;
   container.appendChild(row);
+  setPageLink();
 }
 
 function removeTagRow(button) {
   const row = button.closest('.tag-row');
   if (row) {
     row.remove();
+    setPageLink();
   }
 }
 
@@ -119,13 +133,40 @@ function resetToGte() {
   window.location.reload();
 }
 
+function getCurrentFormTags() {
+  const tagRows = document.querySelectorAll('.tag-row');
+  if (tagRows.length === 0) return getTags();
+  const formTags = [];
+  tagRows.forEach(row => {
+    const idInput = row.querySelector('.tag-id');
+    const typeSelect = row.querySelector('.tag-type');
+    const activeCheckbox = row.querySelector('.tag-active');
+    if (idInput && idInput.value.trim() !== '') {
+      formTags.push({
+        id: idInput.value.trim(),
+        type: typeSelect ? typeSelect.value : 'gtm',
+        isActive: activeCheckbox ? activeCheckbox.checked : true
+      });
+    }
+  });
+  return formTags;
+}
+
 function setPageLink() {
   const el = document.getElementById("pageLink");
   if (!el) return;
 
   const url = new URL(document.location);
-  url.searchParams.set("ctfe", getCtfeUrl());
-  url.searchParams.set("tags", JSON.stringify(getTags()));
+  const ctfeInput = document.getElementById("ctfeUrl");
+  const ctfe = ctfeInput ? ctfeInput.value : getCtfeUrl();
+  if (ctfe) {
+    url.searchParams.set("ctfe", ctfe);
+  } else {
+    url.searchParams.delete("ctfe");
+  }
+  url.searchParams.set("tags", JSON.stringify(getCurrentFormTags()));
+  url.searchParams.delete("tagId");
+  url.searchParams.delete("isGtm");
   el.innerText = url.href;
 }
 
