@@ -24,12 +24,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setPageLink();
   setOutboundHrefs();
+  updateExtUrlLink();
 
   // Inject iframe automatically if enabled in iframe config
   initIframeInjection();
 
   // Keep pageLink and button labels updated live when user changes inputs/checkboxes
   document.addEventListener("input", (e) => {
+    if (e.target.id === "extUrl") {
+      updateExtUrlLink();
+      return;
+    }
     if (e.target.id === "iframeDelay") {
       updateLoadIframeButtonLabel();
       setPageLink();
@@ -40,6 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   document.addEventListener("change", (e) => {
+    if (e.target.id === "extUrl") {
+      updateExtUrlLink();
+      return;
+    }
     if (e.target.id === "iframeDelay") {
       updateLoadIframeButtonLabel();
       setPageLink();
@@ -484,6 +493,46 @@ function setOutboundHrefs() {
     params.set("autoRedirect", true);
     const url = `https://tagging.rushabhs.com/?${params}`;
     btn2.href = url;
+  }
+}
+
+function resolveExtUrl(rawValue) {
+  const trimmed = (rawValue || "").trim();
+  if (!trimmed) return null;
+  try {
+    const parsed = new URL(trimmed);
+    return parsed.protocol === "http:" || parsed.protocol === "https:" ? parsed.href : null;
+  } catch (e) {
+    if (!trimmed.includes("://") && trimmed.includes(".")) {
+      try {
+        const parsed = new URL("https://" + trimmed);
+        return parsed.protocol === "http:" || parsed.protocol === "https:" ? parsed.href : null;
+      } catch (e2) {
+        return null;
+      }
+    }
+    return null;
+  }
+}
+
+function updateExtUrlLink() {
+  const input = document.getElementById("extUrl");
+  const link = document.getElementById("extUrlLink");
+  if (!input || !link) return;
+
+  const resolvedUrl = resolveExtUrl(input.value);
+  if (resolvedUrl) {
+    link.href = resolvedUrl;
+    link.title = resolvedUrl;
+    link.removeAttribute("aria-disabled");
+    link.style.pointerEvents = "auto";
+    link.style.opacity = "1";
+  } else {
+    link.removeAttribute("href");
+    link.removeAttribute("title");
+    link.setAttribute("aria-disabled", "true");
+    link.style.pointerEvents = "none";
+    link.style.opacity = "0.5";
   }
 }
 
