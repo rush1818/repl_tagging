@@ -71,11 +71,32 @@
   <br />
   <br />
 
+  <h3>Iframe</h3>
+  <div class="iframe-controls">
+    <label style="display: flex; align-items: center; cursor: pointer; user-select: none;">
+      <input type="checkbox" id="injectIframe" style="margin-right: 5px; cursor: pointer;">
+      Inject iframe
+    </label>
+    <label for="iframeDelay">Delay (s):</label>
+    <input type="number" id="iframeDelay" min="0" step="any" value="3" style="width: 75px;">
+    <button class="mdc-button mdc-button--raised" id="loadIframeBtn" style="margin-left: 0; margin-bottom: 0;" onclick="loadIframeWithDelay()">
+      <span class="mdc-button__ripple"></span>
+      <span id="loadIframeBtnLabel">Load iframe in 3 s</span>
+    </button>
+  </div>
+  <div id="iframeStatus" class="iframe-status"></div>
+  <div id="iframeContainer"></div>
+
+  <br />
+
   <div>
     <h4>Supported URL params:</h4>
     <ul>
       <li>
-        <pre>tags</pre> e.g. [{"id":"GTM-M8Z49QT","type":"gtm","isActive":true}]
+        <pre>tags</pre> e.g. [{"id":"GTM-M8Z49QT","type":"gtm","isActive":true,"frame":"ALL"}] (frame: "ALL" | "MAIN" | "IFRAME")
+      </li>
+      <li>
+        <pre>iframe</pre> e.g. {"enabled":true,"delay":3}
       </li>
       <li>
         <pre>tagId</pre> e.g. G-1234
@@ -115,6 +136,7 @@
         <li><a href="child1.html">Child 1 page</a></li>
         <li><a href="child1.html" rel="noreferrer">Child 1 page with noreferrer</a></li>
         <li><a href="child2.html">Child 2 page</a></li>
+        <li><a href="iframe.html">Iframe page (standalone)</a></li>
 
         <li><a href="untagged.html">Untagged page</a></li>
         <li><a href="consent.html">Consent page</a></li>
