@@ -143,22 +143,33 @@ function loadTags() {
   });
 }
 
+let gtagJsInitialized = false;
+
+function ensureGtag() {
+  if (!Array.isArray(window.dataLayer)) {
+    window.dataLayer = [];
+  }
+  if (typeof window.gtag !== "function") {
+    window.gtag = function () {
+      window.dataLayer.push(arguments);
+    };
+  }
+  const hasJsCommand =
+    gtagJsInitialized ||
+    window.dataLayer.some((entry) => entry && entry[0] === "js");
+  if (!hasJsCommand) {
+    gtagJsInitialized = true;
+    window.gtag("js", new Date());
+  }
+}
+
 function loadGtmTag(idToLoad) {
-  (function (w, d, s, l, i) {
-    if (!Array.isArray(w[l])) {
-      w[l] = [];
-    }
-    w[l].push({
-      "gtm.start": new Date().getTime(),
-      event: "gtm.js",
-    });
-    var f = d.getElementsByTagName(s)[0],
-      j = d.createElement(s),
-      dl = l != "dataLayer" ? "&l=" + l : "";
-    j.async = true;
-    j.src = ctfeUrl + "/gtm.js?id=" + i + dl;
-    f.parentNode.insertBefore(j, f);
-  })(window, document, "script", "dataLayer", idToLoad);
+  const el = document.createElement("script");
+  el.async = true;
+  el.src = ctfeUrl + "/gtm.js?id=" + idToLoad;
+  document.head.appendChild(el);
+
+  ensureGtag();
 }
 
 function loadGoogleTag(idToLoad) {
@@ -167,15 +178,7 @@ function loadGoogleTag(idToLoad) {
   el.src = ctfeUrl + "/gtag/js?id=" + idToLoad;
   document.head.appendChild(el);
 
-  if (!Array.isArray(window.dataLayer)) {
-    window.dataLayer = [];
-  }
-  if (!window.gtag) {
-    window.gtag = function () {
-      window.dataLayer.push(arguments);
-    };
-    window.gtag("js", new Date());
-  }
+  ensureGtag();
   window.gtag("config", idToLoad);
 }
 
