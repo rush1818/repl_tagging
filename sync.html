@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Storage Sync</title>
+</head>
+<body>
+  <script>
+    (function () {
+      const ALLOWED_ORIGINS = new Set([
+        "https://www2.rushabhs.com",
+        "https://www3.rushabhs.com",
+      ]);
+
+      const SYNC_KEYS = [
+        "tags",
+        "tagsRemoved",
+        "ctfeUrl",
+        "iframe",
+        "app-theme",
+        "adstorage",
+        "analyticsstorage",
+      ];
+
+      function readAll() {
+        const data = {};
+        for (const key of SYNC_KEYS) {
+          const val = localStorage.getItem(key);
+          if (val !== null) {
+            data[key] = val;
+          }
+        }
+        return data;
+      }
+
+      window.addEventListener("message", (event) => {
+        if (!ALLOWED_ORIGINS.has(event.origin)) return;
+        const msg = event.data;
+        if (!msg || typeof msg !== "object") return;
+
+        if (msg.type === "GET_ALL") {
+          event.source.postMessage(
+            { type: "SYNC_STATE", id: msg.id, data: readAll() },
+            event.origin
+          );
+        } else if (msg.type === "SET" && SYNC_KEYS.includes(msg.key)) {
+          if (msg.value === null || msg.value === undefined) {
+            localStorage.removeItem(msg.key);
+          } else {
+            localStorage.setItem(msg.key, String(msg.value));
+          }
+        }
+      });
+
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: "SYNC_READY" }, "*");
+      }
+    })();
+  </script>
+</body>
+</html>

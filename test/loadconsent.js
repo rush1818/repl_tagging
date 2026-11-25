@@ -11,15 +11,22 @@ gtag('consent', 'default', {
   'analytics_storage': analyticsstorage,
 });
 
+function syncConsentKey(key, value) {
+  localStorage.setItem(key, value);
+  if (typeof window.syncStorageSet === 'function') {
+    window.syncStorageSet(key, value);
+  }
+}
+
 function grantConsent() {
-  localStorage.setItem('adstorage', 'granted');
-  localStorage.setItem('analyticsstorage', 'granted');
+  syncConsentKey('adstorage', 'granted');
+  syncConsentKey('analyticsstorage', 'granted');
   runUpdate();
 }
 
 function denyConsent(){
-  localStorage.setItem('adstorage', 'denied');
-  localStorage.setItem('analyticsstorage', 'denied');
+  syncConsentKey('adstorage', 'denied');
+  syncConsentKey('analyticsstorage', 'denied');
   runUpdate();
 }
 

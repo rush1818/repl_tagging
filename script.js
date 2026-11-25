@@ -3,31 +3,38 @@
 let iframeInjectTimer = null;
 let iframeCountdownInterval = null;
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Populate CTFE URL input
+function refreshUI() {
   const ctfeInput = document.getElementById("ctfeUrl");
   if (ctfeInput) {
     ctfeInput.value = getCtfeUrl();
   }
 
-  // Populate Tags UI
   renderTagsUI();
-
-  // Populate Iframe UI
   renderIframeUI();
-
-  // Populate Header with loaded tags
   renderLoadedTagsHeader();
-
-  // Populate frame context indicator if present
   renderFrameContext();
 
   setPageLink();
   setOutboundHrefs();
   updateExtUrlLink();
 
-  // Inject iframe automatically if enabled in iframe config
+  if (iframeInjectTimer) {
+    clearTimeout(iframeInjectTimer);
+    iframeInjectTimer = null;
+  }
+  if (iframeCountdownInterval) {
+    clearInterval(iframeCountdownInterval);
+    iframeCountdownInterval = null;
+  }
   initIframeInjection();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  refreshUI();
+
+  window.addEventListener("storageSyncReady", () => {
+    refreshUI();
+  });
 
   // Keep pageLink and button labels updated live when user changes inputs/checkboxes
   document.addEventListener("input", (e) => {
